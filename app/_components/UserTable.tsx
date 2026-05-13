@@ -1,7 +1,14 @@
+"use client";
 import { JSX } from "react";
 import { User } from "../page";
+import { useRouter } from "next/navigation";
 
 export default function UserTable({ users }: { users: User[] }): JSX.Element {
+  const router = useRouter();
+
+  const navigateDetail = (selectedUser: User) => {
+    router.push("/users/" + selectedUser.id);
+  };
   return (
     <div className="min-h-screen p-25">
       <div className="mx-auto max-w-5xl rounded-2xl bg-white p-6 shadow-md border-2">
@@ -70,7 +77,10 @@ export default function UserTable({ users }: { users: User[] }): JSX.Element {
                   </td>
 
                   <td className="px-4 py-3">
-                    <button className="text-sm font-medium text-blue-600 hover:underline">
+                    <button
+                      onClick={() => navigateDetail(user)}
+                      className="text-sm font-medium text-blue-600 hover:underline cursor-pointer"
+                    >
                       Detail
                     </button>
                   </td>

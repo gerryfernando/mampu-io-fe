@@ -27,7 +27,7 @@ export default function UserDetail({
   const { company, address } = userDetail;
 
   return (
-    <div className="max-w-md w-full bg-white rounded-2xl shadow-md border border-zinc-100 p-6 font-sans">
+    <div className="w-full bg-white rounded-2xl shadow-md border border-zinc-100 p-6 font-sans">
       <div className="flex items-center gap-4 mb-6">
         <div className="w-14 h-14 rounded-full bg-zinc-800 flex items-center justify-center text-white text-xl font-bold">
           {userDetail.name?.[0]}
@@ -50,7 +50,7 @@ export default function UserDetail({
         <TextLine label="" value={company.catchPhrase} />
         <TextLine
           label="Address"
-          value={`${address?.street}, ${address?.suite}, ${address?.city},${address?.zipcode}`}
+          value={`${address?.street}, ${address?.suite}, ${address?.city} (${address?.zipcode})`}
         />
       </div>
     </div>

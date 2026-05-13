@@ -40,7 +40,7 @@ export default async function Page({ params }: Props) {
   const userDetail: UserDetailType = await res.json();
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans">
+    <div className="flex flex-col flex-1 p-10 bg-zinc-50 font-sans">
       <UserDetail userDetail={userDetail} />
     </div>
   );

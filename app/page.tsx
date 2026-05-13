@@ -33,7 +33,7 @@ export default async function Home() {
   const todos: TodoType[] = await resTodo.json();
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans">
+    <div className="flex flex-col flex-1   bg-zinc-50 font-sans">
       <UserList users={users} posts={posts} todos={todos} />
     </div>
   );

@@ -27,10 +27,33 @@ const users = [
   },
 ];
 
+jest.mock("next/navigation", () => ({
+  useRouter: jest.fn(),
+}));
+
 describe("UserTable", () => {
   it("renders title", () => {
     render(<UserTable users={users} />);
 
     expect(screen.getByText("User List")).toBeInTheDocument();
+  });
+
+  it("renders header", () => {
+    render(<UserTable users={users} />);
+
+    expect(screen.getByText("Name")).toBeInTheDocument();
+    expect(screen.getByText("Email")).toBeInTheDocument();
+    expect(screen.getByText("Website")).toBeInTheDocument();
+    expect(screen.getByText("Action")).toBeInTheDocument();
+    expect(screen.getByText("Phone")).toBeInTheDocument();
+    expect(screen.getByText("Detail")).toBeInTheDocument();
+  });
+
+  it("renders table", () => {
+    render(<UserTable users={users} />);
+
+    expect(screen.getByText(users[0].email)).toBeInTheDocument();
+    expect(screen.getByText(users[0].website)).toBeInTheDocument();
+    expect(screen.getByText(users[0].phone)).toBeInTheDocument();
   });
 });

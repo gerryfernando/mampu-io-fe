@@ -1,6 +1,6 @@
 import UserTable from "./_components/UserTable";
 
-export type User = {
+export type UserType = {
   id: number;
   name: string;
   email: string;
@@ -10,7 +10,7 @@ export type User = {
 
 export default async function Home() {
   const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  const users: User[] = await res.json();
+  const users: UserType[] = await res.json();
 
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans">

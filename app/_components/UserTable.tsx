@@ -1,17 +1,7 @@
 import { JSX } from "react";
+import { User } from "../page";
 
-type User = {
-  id: number;
-  name: string;
-  email: string;
-  website: string;
-  phone: string;
-};
-
-export default async function UserTable(): Promise<JSX.Element> {
-  const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  const users: User[] = await res.json();
-
+export default function UserTable({ users }: { users: User[] }): JSX.Element {
   return (
     <div className="min-h-screen p-25">
       <div className="mx-auto max-w-5xl rounded-2xl bg-white p-6 shadow-md border-2">

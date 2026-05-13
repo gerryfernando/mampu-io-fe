@@ -22,6 +22,31 @@ export const mockUserDetail = {
   },
 };
 
+export const mockPostList = [
+  {
+    userId: 1,
+    id: 1,
+    title:
+      "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
+    body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
+  },
+];
+
+export const mockTodoList = [
+  {
+    userId: 1,
+    id: 1,
+    title: "delectus aut autem",
+    completed: false,
+  },
+  {
+    userId: 1,
+    id: 2,
+    title: "quis ut nam facilis et officia qui",
+    completed: true,
+  },
+];
+
 export const mockUserList = [
   {
     id: 1,

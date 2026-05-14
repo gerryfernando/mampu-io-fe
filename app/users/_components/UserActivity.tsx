@@ -10,7 +10,7 @@ export default function UserActivity({
   todos: TodoType[];
 }) {
   const [activeTab, setActiveTab] = useState<"posts" | "todos">("posts");
-  const [todoFilter, setTodoFilter] = useState<"all" | "done" | "pending">(
+  const [todoFilter, setTodoFilter] = useState<"all" | "completed" | "pending">(
     "all",
   );
   const [showAll, setShowAll] = useState(false);
@@ -18,7 +18,7 @@ export default function UserActivity({
   const filteredTodos = todos.filter((t) =>
     todoFilter === "all"
       ? true
-      : todoFilter === "done"
+      : todoFilter === "completed"
         ? t.completed
         : !t.completed,
   );
@@ -29,6 +29,7 @@ export default function UserActivity({
     <div className="mt-6 rounded-2xl border border-gray-200 bg-white p-6">
       <div className="flex gap-2 mb-6">
         <button
+          id="post-button"
           onClick={() => setActiveTab("posts")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
             activeTab === "posts"
@@ -39,6 +40,7 @@ export default function UserActivity({
           Posts ({posts.length})
         </button>
         <button
+          id="todo-button"
           onClick={() => setActiveTab("todos")}
           className={`px-4 py-2 rounded-lg text-sm font-medium transition ${
             activeTab === "todos"
@@ -76,6 +78,7 @@ export default function UserActivity({
 
           {posts.length > 5 && (
             <button
+              id="show-more-button"
               onClick={() => setShowAll(!showAll)}
               className="text-xs text-gray-400 cursor-pointer hover:text-gray-600 transition text-center"
             >
@@ -90,9 +93,10 @@ export default function UserActivity({
         <div className="flex flex-col gap-3">
           {/* Filter */}
           <div className="flex gap-2 mb-2">
-            {(["all", "done", "pending"] as const).map((label) => (
+            {(["all", "completed", "pending"] as const).map((label) => (
               <button
                 key={label}
+                id={`filter-${label}`}
                 onClick={() => setTodoFilter(label)}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition capitalize ${
                   todoFilter === label

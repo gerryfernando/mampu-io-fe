@@ -28,7 +28,37 @@ export const mockPostList = [
     id: 1,
     title:
       "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-    body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto",
+    body: "quia et suscipit suscipit recusandae consequuntur expedita et cum reprehenderit molestiae ut ut quas totamno strum rerum est autem sunt rem eveniet architecto",
+  },
+  {
+    userId: 1,
+    id: 2,
+    title: "its no 2",
+    body: "its describe for no 2",
+  },
+  {
+    userId: 1,
+    id: 3,
+    title: "its no 3",
+    body: "its describe for no 3",
+  },
+  {
+    userId: 1,
+    id: 4,
+    title: "its no 4",
+    body: "its describe for no 4",
+  },
+  {
+    userId: 1,
+    id: 5,
+    title: "its no 5",
+    body: "its describe for no 5",
+  },
+  {
+    userId: 1,
+    id: 6,
+    title: "its no 6",
+    body: "its describe for no 6",
   },
 ];
 

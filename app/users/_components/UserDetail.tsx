@@ -3,6 +3,7 @@ import { JSX } from "react";
 import { UserDetailType } from "../[id]/page";
 import { PostType, TodoType } from "@/app/page";
 import UserActivity from "./UserActivity";
+import { useRouter } from "next/navigation";
 
 const TextLine = ({
   label,
@@ -30,16 +31,35 @@ export default function UserDetail({
   posts: PostType[];
   todos: TodoType[];
 }): JSX.Element {
+  const router = useRouter();
   const { company, address } = userDetail;
   const userPost = posts.filter((val) => val.userId === userDetail.id);
   const userTodos = todos.filter((val) => val.userId === userDetail.id);
 
-  console.log(userPost, userTodos);
-
   return (
     <div className="w-full bg-white rounded-2xl shadow-md border border-zinc-100 p-6 font-sans">
       <div className="flex items-center gap-4 mb-6">
-        <div className="w-14 h-14 rounded-full bg-zinc-800 flex items-center justify-center text-white text-xl font-bold">
+        <button
+          id="back-button"
+          onClick={() => router.back()}
+          className="flex cursor-pointer items-center gap-2 text-sm text-gray-500 hover:text-gray-800 transition"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-6 h-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+        <div className="hidden sm:flex w-14 h-14 rounded-full bg-zinc-800 flex items-center justify-center text-white text-xl font-bold">
           {userDetail.name?.[0]}
         </div>
         <div>

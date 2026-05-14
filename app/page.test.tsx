@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import UserList from "./_components/UserList";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import {
   mockMultiUserList,
   mockPostList,
@@ -10,11 +10,28 @@ import {
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
+  useSearchParams: jest.fn(),
 }));
 
 describe("UserList", () => {
   const users = mockUserList;
 
+  beforeEach(() => {
+    (useRouter as jest.Mock).mockReturnValue({
+      replace: jest.fn(),
+      push: jest.fn(),
+      back: jest.fn(),
+    });
+
+    (useSearchParams as jest.Mock).mockReturnValue({
+      get: (key: string) => {
+        const params: Record<string, string> = {
+          search: "",
+        };
+        return params[key] ?? null;
+      },
+    });
+  });
   describe("Render", () => {
     beforeEach(() => {
       render(
@@ -66,6 +83,28 @@ describe("UserList", () => {
   describe("Search Input", () => {
     const twoUsers = mockMultiUserList;
 
+    it("initializes search from url params", () => {
+      (useSearchParams as jest.Mock).mockReturnValue({
+        get: (key: string) => {
+          const params: Record<string, string> = {
+            search: "John",
+          };
+          return params[key] ?? null;
+        },
+      });
+
+      render(
+        <UserList users={twoUsers} posts={mockPostList} todos={mockTodoList} />,
+      );
+
+      const input = screen.getByPlaceholderText(
+        "Search user and press enter to search",
+      );
+      expect(input).toHaveValue("John");
+      expect(screen.queryByText("Leanne Graham")).not.toBeInTheDocument();
+      expect(screen.queryByText("Ervin Howell")).not.toBeInTheDocument();
+    });
+
     it("updates value when typing", () => {
       render(
         <UserList users={twoUsers} posts={mockPostList} todos={mockTodoList} />,
@@ -93,6 +132,21 @@ describe("UserList", () => {
 
       expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
       expect(screen.queryByText("Ervin Howell")).not.toBeInTheDocument();
+    });
+
+    it("not triggers search when press another button", () => {
+      render(
+        <UserList users={twoUsers} posts={mockPostList} todos={mockTodoList} />,
+      );
+      const input = screen.getByPlaceholderText(
+        "Search user and press enter to search",
+      );
+
+      fireEvent.change(input, { target: { value: "Leanne" } });
+      fireEvent.keyDown(input, { key: "Shift" });
+
+      expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
+      expect(screen.queryByText("Ervin Howell")).toBeInTheDocument();
     });
 
     it("reset search when value empty", () => {

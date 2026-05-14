@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import UserDetail from "../_components/UserDetail";
+import { PostType, TodoType } from "@/app/page";
 
 type Props = {
   params: Promise<{ id: string }>;
@@ -29,6 +30,36 @@ export type UserDetailType = {
   };
 };
 
+async function getUserData(id: string) {
+  const [userDetail, posts, todos] = await Promise.all([
+    fetch(`https://jsonplaceholder.typicode.com/users/${id}`, {
+      next: { revalidate: 60 },
+    }).then((r) => r.json()),
+    fetch("https://jsonplaceholder.typicode.com/posts", {
+      next: { revalidate: 60 },
+    }).then((r) => r.json()),
+    fetch("https://jsonplaceholder.typicode.com/todos", {
+      next: { revalidate: 60 },
+    }).then((r) => r.json()),
+  ]);
+
+  return {
+    userDetail: userDetail as UserDetailType,
+    posts: posts as PostType[],
+    todos: todos as TodoType[],
+  };
+}
+
+export async function generateMetadata({ params }: { params: { id: string } }) {
+  const { id } = params;
+  const user = (await getUserData(id)).userDetail;
+
+  return {
+    title: `${user.name} Profile`,
+    description: "Profile Detail",
+  };
+}
+
 export default async function Page({ params }: Props) {
   const { id } = await params;
 
@@ -36,12 +67,11 @@ export default async function Page({ params }: Props) {
     return notFound();
   }
 
-  const res = await fetch("https://jsonplaceholder.typicode.com/users/" + id);
-  const userDetail: UserDetailType = await res.json();
+  const { userDetail, posts, todos } = await getUserData(id);
 
   return (
     <div className="flex flex-col flex-1 p-10 bg-zinc-50 font-sans">
-      <UserDetail userDetail={userDetail} />
+      <UserDetail userDetail={userDetail} posts={posts} todos={todos} />
     </div>
   );
 }

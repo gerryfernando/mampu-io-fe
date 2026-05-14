@@ -2,7 +2,7 @@
 import { JSX, useMemo, useState } from "react";
 import { PostType, TodoType, UserType } from "../page";
 import { useRouter } from "next/navigation";
-import { filterUserList, getTodoTotal } from "@/src/utils/array";
+import { filterUserList, getPostTotal, getTodoTotal } from "@/src/utils/array";
 
 export default function UserList({
   users,
@@ -49,7 +49,7 @@ export default function UserList({
               setValue(e.target.value);
             }}
             onKeyDown={handleKeyDown}
-            placeholder="Search user..."
+            placeholder="Search user and press enter to search"
             className="w-full rounded-lg border border-gray-300 text-black px-4 py-2 outline-none transition focus:border-black"
           />
         </div>
@@ -121,7 +121,7 @@ export default function UserList({
                         Post
                       </span>
                       <span className="inline-block w-fit rounded-full bg-gray-200 px-2 py-0.5 text-xs text-gray-700">
-                        {posts.length}
+                        {getPostTotal(user.id, posts).total}
                       </span>
                     </div>
 

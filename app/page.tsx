@@ -23,14 +23,17 @@ export type TodoType = {
   completed: boolean;
 };
 export default async function Home() {
-  const res = await fetch("https://jsonplaceholder.typicode.com/users");
-  const users: UserType[] = await res.json();
-
-  const resPost = await fetch("https://jsonplaceholder.typicode.com/posts");
-  const posts: PostType[] = await resPost.json();
-
-  const resTodo = await fetch("https://jsonplaceholder.typicode.com/todos");
-  const todos: TodoType[] = await resTodo.json();
+  const [users, posts, todos] = await Promise.all([
+    fetch("https://jsonplaceholder.typicode.com/users", {
+      next: { revalidate: 60 },
+    }).then((r) => r.json()),
+    fetch("https://jsonplaceholder.typicode.com/posts", {
+      next: { revalidate: 60 },
+    }).then((r) => r.json()),
+    fetch("https://jsonplaceholder.typicode.com/todos", {
+      next: { revalidate: 60 },
+    }).then((r) => r.json()),
+  ]);
 
   return (
     <div className="flex flex-col flex-1   bg-zinc-50 font-sans">

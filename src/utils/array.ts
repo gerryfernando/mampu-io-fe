@@ -1,4 +1,4 @@
-import { TodoType, UserType } from "@/app/page";
+import { PostType, TodoType, UserType } from "@/app/page";
 
 export const getTodoTotal = (id: number, array: TodoType[]) => {
   const total = array.filter((arr) => arr.userId === id).length;
@@ -9,6 +9,12 @@ export const getTodoTotal = (id: number, array: TodoType[]) => {
   return { completed, pending: total - completed, total };
 };
 
+export const getPostTotal = (id: number, array: PostType[]) => {
+  const total = array.filter((arr) => arr.userId === id).length;
+
+  return { total };
+};
+
 export const filterUserList = (users: UserType[], search: string) => {
   let data = [...users];
 
@@ -16,7 +22,7 @@ export const filterUserList = (users: UserType[], search: string) => {
     data = data.filter(
       (val) =>
         val.name.toLowerCase().includes(search.toLowerCase()) ||
-        val.email.toLowerCase().includes(search.toLowerCase()),
+        val.username.toLowerCase().includes(search.toLowerCase()),
     );
   }
 

@@ -2,6 +2,7 @@
 import { JSX } from "react";
 import { UserDetailType } from "../[id]/page";
 import { PostType, TodoType } from "@/app/page";
+import UserActivity from "./UserActivity";
 
 const TextLine = ({
   label,
@@ -11,7 +12,7 @@ const TextLine = ({
   value: string | number;
 }) => {
   return (
-    <div className="flex gap-4">
+    <div className="flex flex-col sm:flex-row sm:items-center gap-4">
       <span className="mt-1 text-xs w-30 text-zinc-400 font-medium uppercase tracking-wide">
         {label}
       </span>
@@ -61,6 +62,8 @@ export default function UserDetail({
           value={`${address?.street}, ${address?.suite}, ${address?.city} (${address?.zipcode})`}
         />
       </div>
+
+      <UserActivity posts={userPost} todos={userTodos} />
     </div>
   );
 }

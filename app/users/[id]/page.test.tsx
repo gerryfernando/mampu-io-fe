@@ -1,13 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import UserDetail from "../_components/UserDetail";
-import { mockUserDetail } from "@/src/const/const";
+import { mockPostList, mockTodoList, mockUserDetail } from "@/src/const/const";
 
 describe("UserDetail", () => {
   const users = mockUserDetail;
+  const posts = mockPostList;
+  const todos = mockTodoList;
 
   describe("Render", () => {
     beforeEach(() => {
-      render(<UserDetail userDetail={users} />);
+      render(<UserDetail userDetail={users} posts={posts} todos={todos} />);
     });
 
     it("renders label", () => {

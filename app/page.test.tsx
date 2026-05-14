@@ -1,7 +1,12 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import UserList from "./_components/UserList";
 import { useRouter } from "next/navigation";
-import { mockPostList, mockTodoList, mockUserList } from "@/src/const/const";
+import {
+  mockMultiUserList,
+  mockPostList,
+  mockTodoList,
+  mockUserList,
+} from "@/src/const/const";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
@@ -55,6 +60,58 @@ describe("UserList", () => {
       fireEvent.click(screen.getByText("Detail"));
 
       expect(mockPush).toHaveBeenCalledWith("/users/1");
+    });
+  });
+
+  describe("Search Input", () => {
+    const twoUsers = mockMultiUserList;
+
+    it("updates value when typing", () => {
+      render(
+        <UserList users={twoUsers} posts={mockPostList} todos={mockTodoList} />,
+      );
+
+      const input = screen.getByPlaceholderText(
+        "Search user and press enter to search",
+      );
+
+      fireEvent.change(input, { target: { value: "Leanne" } });
+
+      expect(input).toHaveValue("Leanne");
+    });
+
+    it("triggers search on Enter key", () => {
+      render(
+        <UserList users={twoUsers} posts={mockPostList} todos={mockTodoList} />,
+      );
+      const input = screen.getByPlaceholderText(
+        "Search user and press enter to search",
+      );
+
+      fireEvent.change(input, { target: { value: "Leanne" } });
+      fireEvent.keyDown(input, { key: "Enter" });
+
+      expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
+      expect(screen.queryByText("Ervin Howell")).not.toBeInTheDocument();
+    });
+
+    it("reset search when value empty", () => {
+      render(
+        <UserList users={twoUsers} posts={mockPostList} todos={mockTodoList} />,
+      );
+      const input = screen.getByPlaceholderText(
+        "Search user and press enter to search",
+      );
+
+      fireEvent.change(input, { target: { value: "Leanne" } });
+      fireEvent.keyDown(input, { key: "Enter" });
+
+      expect(screen.getByText("Leanne Graham")).toBeInTheDocument();
+
+      fireEvent.change(input, { target: { value: "" } });
+      fireEvent.keyDown(input, { key: "Enter" });
+
+      expect(screen.getByText("Ervin Howell")).toBeInTheDocument();
     });
   });
 });

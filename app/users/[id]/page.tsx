@@ -62,12 +62,11 @@ export async function generateMetadata({ params }: { params: { id: string } }) {
 
 export default async function Page({ params }: Props) {
   const { id } = await params;
+  const { userDetail, posts, todos } = await getUserData(id);
 
-  if (!id) {
+  if (!id || Object.keys(userDetail).length === 0) {
     return notFound();
   }
-
-  const { userDetail, posts, todos } = await getUserData(id);
 
   return (
     <div className="flex flex-col flex-1 p-10 bg-zinc-50 font-sans">

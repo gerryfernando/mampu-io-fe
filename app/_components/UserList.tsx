@@ -1,7 +1,7 @@
 "use client";
 import { JSX, useMemo, useState } from "react";
 import { PostType, TodoType, UserType } from "../page";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { filterUserList, getPostTotal, getTodoTotal } from "@/src/utils/array";
 
 export default function UserList({
@@ -14,16 +14,28 @@ export default function UserList({
   todos: TodoType[];
 }): JSX.Element {
   const router = useRouter();
-  const [value, setValue] = useState("");
-  const [search, setSearch] = useState("");
+  const searchParams = useSearchParams();
+  const [value, setValue] = useState(searchParams.get("search") ?? "");
+  const [search, setSearch] = useState(searchParams.get("search") ?? "");
 
   const navigateDetail = (selectedUser: UserType) => {
     router.push("/users/" + selectedUser.id);
   };
 
+  const updateParams = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key);
+    }
+    router.replace(`?${params.toString()}`);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       setSearch(value);
+      updateParams("search", value);
     }
   };
 
@@ -42,9 +54,11 @@ export default function UserList({
           <input
             type="text"
             value={value}
+            id="search-input"
             onChange={(e) => {
               if (e.target.value === "") {
                 setSearch("");
+                updateParams("search", "");
               }
               setValue(e.target.value);
             }}

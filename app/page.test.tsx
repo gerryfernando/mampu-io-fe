@@ -168,4 +168,34 @@ describe("UserList", () => {
       expect(screen.getByText("Ervin Howell")).toBeInTheDocument();
     });
   });
+
+  describe("sort user", () => {
+    const twoUsers = mockMultiUserList;
+
+    it("sorts asc as default", () => {
+      render(
+        <UserList users={twoUsers} posts={mockPostList} todos={mockTodoList} />,
+      );
+
+      const names = screen
+        .getAllByTestId("user-name")
+        .map((el) => el.textContent);
+
+      expect(names).toEqual(["Ervin Howell", "Leanne Graham"]);
+    });
+
+    it("sorts desc when sort button clicked", () => {
+      render(
+        <UserList users={twoUsers} posts={mockPostList} todos={mockTodoList} />,
+      );
+
+      fireEvent.click(document.querySelector("#sort-button")!);
+
+      const names = screen
+        .getAllByTestId("user-name")
+        .map((el) => el.textContent);
+
+      expect(names).toEqual(["Leanne Graham", "Ervin Howell"]);
+    });
+  });
 });

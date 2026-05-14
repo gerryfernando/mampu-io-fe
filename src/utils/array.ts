@@ -15,7 +15,11 @@ export const getPostTotal = (id: number, array: PostType[]) => {
   return { total };
 };
 
-export const filterUserList = (users: UserType[], search: string) => {
+export const filterUserList = (
+  users: UserType[],
+  search: string,
+  sortOrder: "asc" | "desc",
+) => {
   let data = [...users];
 
   if (search) {
@@ -24,6 +28,14 @@ export const filterUserList = (users: UserType[], search: string) => {
         val.name.toLowerCase().includes(search.toLowerCase()) ||
         val.username.toLowerCase().includes(search.toLowerCase()),
     );
+  }
+
+  if (sortOrder === "asc") {
+    data.sort((a, b) => a.name.localeCompare(b.name));
+  }
+
+  if (sortOrder === "desc") {
+    data.sort((a, b) => b.name.localeCompare(a.name));
   }
 
   return data;

@@ -4,6 +4,8 @@ import { PostType, TodoType, UserType } from "../page";
 import { useRouter, useSearchParams } from "next/navigation";
 import { filterUserList, getPostTotal, getTodoTotal } from "@/src/utils/array";
 
+type SortOrder = "asc" | "desc";
+
 export default function UserList({
   users,
   posts,
@@ -17,6 +19,9 @@ export default function UserList({
   const searchParams = useSearchParams();
   const [value, setValue] = useState(searchParams.get("search") ?? "");
   const [search, setSearch] = useState(searchParams.get("search") ?? "");
+  const [sortOrder, setSortOrder] = useState<SortOrder>(
+    (searchParams.get("sort") as SortOrder) ?? "asc",
+  );
 
   const navigateDetail = (selectedUser: UserType) => {
     router.push("/users/" + selectedUser.id);
@@ -40,8 +45,8 @@ export default function UserList({
   };
 
   const mappingUser = useMemo(() => {
-    return filterUserList(users, search);
-  }, [search, users]);
+    return filterUserList(users, search, sortOrder);
+  }, [search, users, sortOrder]);
 
   return (
     <div className="min-h-screen p-10">
@@ -50,7 +55,7 @@ export default function UserList({
           <h1 className="text-2xl font-bold text-gray-800">User List</h1>
         </div>
 
-        <div className="mb-6">
+        <div className="mb-6 flex gap-2">
           <input
             type="text"
             value={value}
@@ -66,6 +71,18 @@ export default function UserList({
             placeholder="Search user and press enter to search"
             className="w-full rounded-lg border border-gray-300 text-black px-4 py-2 outline-none transition focus:border-black"
           />
+          <button
+            id="sort-button"
+            onClick={() => {
+              const value = sortOrder === "asc" ? "desc" : "asc";
+              setSortOrder(value);
+              updateParams("sort", value);
+            }}
+            className="flex cursor-pointer items-center gap-1 text-sm text-gray-500 hover:text-gray-800 transition"
+          >
+            Sort by Name
+            <span className="text-lg">{sortOrder === "asc" ? "↑" : "↓"}</span>
+          </button>
         </div>
 
         {mappingUser.length === 0 ? (
@@ -93,7 +110,10 @@ export default function UserList({
                       {user.name?.[0]}
                     </div>
                     <div>
-                      <p className="text-sm font-semibold text-gray-800 leading-tight">
+                      <p
+                        data-testid="user-name"
+                        className="text-sm font-semibold text-gray-800 leading-tight"
+                      >
                         {user.name}
                       </p>
                       <p className="text-xs text-gray-400">{user.username}</p>
